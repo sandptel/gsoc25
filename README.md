@@ -1,16 +1,16 @@
 # gsoc25
+All work done in the project is a part of [Google Summer of Code 2025](https://summerofcode.withgoogle.com/).
 project link -- https://summerofcode.withgoogle.com/programs/2025/projects/mV0VlVwv
 
 ## Project Description
-Regolith is a productivity-focused Ubuntu-based desktop environment that combines tiling window managers (Sway, i3) with GNOME components for system management and GUI features. While GNOME depends on Mutter and custom Wayland protocols unsupported by wlroots-based compositors like Sway, this limits modularity and integration. To improve flexibility, this project aim to integrate the new Cosmic desktop components (cosmic-epoch), which, despite being in early alpha, offers a more modular and integration-friendly design.
+Regolith is a productivity-focused Ubuntu-based desktop environment that combines tiling window managers (Sway, i3) with GNOME components for system management and GUI features. While GNOME depends on Mutter and custom Wayland protocols unsupported by wlroots-based compositors like Sway, this limits modularity and integration. To improve flexibility, this project aim to integrate the new Cosmic desktop components (cosmic-epoch), which, despite being in early alpha, offers a more modular and integration-friendly design33.
 
 ## Outcome
-### `configuration` 
-https://github.com/regolith-linux/regolith-wm-config/pull/56
 
-This setup replaces GNOME components with COSMIC ones and adds a live bridge from COSMIC Settings to Sway: `regolith-control-center` is swapped for `cosmic-settings` + `cosmic-settings-daemon`, `swaybg` for `cosmic-bg`, `nautilus` for `cosmic-files`, and `gnome-session-quit` actions are routed through `systemctl`/`loginctl`, while `cosmic-idle` provides idle/blank/lock timing; a forked cosmic-settings emits changes via swayipc-rs so adjustments apply immediately through Sway IPC, and simultaneously writes equivalent configuration into `$HOME/.config/regolith3/sway/cosmic-settings/generated-config.d/*`, which must be included in the main Sway config to persist those changes across sessions
+### `regolith-control-center` -> `cosmic-settings` 
+`cosmic-settings` was proposed to replace exsting system of (`gnome-control-center` + `regolith-inputd` + `regolith-powerd` + `regolith-displayd`) which manages changes in settings for input (keyboard, mouse, touchpad), display and power. 
 
-### `cosmic-settings` adapted for regolith
+## generated-config
 https://github.com/pop-os/cosmic-settings/pull/1337
 [This fork](https://github.com/sandptel/cosmic-settings) of cosmic-settings that runs a equivalent sway command for `input` settings : `mouse` + `keyboard` + `touchpad` instead of running the change for the compositor. 
 This is used as a replacement to the existing gnome-settings application. 
@@ -20,9 +20,12 @@ https://github.com/user-attachments/assets/4f0c103c-a678-42c5-aeb7-330fb7963462
 #### for example: 
 If we increase or decrease the speed of say touchpad or mouse, the cosmic-settings daemon on any change in the settings values will equivalently apply the state in sway using swayipc rust and in `~/.config/regolith3/sway/cosmic-settings/generated-config.d`
 
+### `configuration` 
+https://github.com/regolith-linux/regolith-wm-config/pull/56
+
+This setup replaces GNOME components with COSMIC ones and adds a live bridge from COSMIC Settings to Sway: `regolith-control-center` is swapped for `cosmic-settings` + `cosmic-settings-daemon`, `swaybg` for `cosmic-bg`, `nautilus` for `cosmic-files`, and `gnome-session-quit` actions are routed through `systemctl`/`loginctl`, while `cosmic-idle` provides idle/blank/lock timing; a forked cosmic-settings emits changes via swayipc-rs so adjustments apply immediately through Sway IPC, and simultaneously writes equivalent configuration into `$HOME/.config/regolith3/sway/cosmic-settings/generated-config.d/*`, which must be included in the main Sway config to persist those changes across sessions
+
 ### `session` files
-
-
 ## How to boot into regolith + cosmic session ?
 We need to install the COSMIC components 
 1. using the OpenSUSE Build Service first update the 
