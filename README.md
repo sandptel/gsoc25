@@ -1,6 +1,10 @@
 # gsoc25
-All work done in the project is a part of [Google Summer of Code 2025](https://summerofcode.withgoogle.com/).
-project link -- https://summerofcode.withgoogle.com/programs/2025/projects/mV0VlVwv
+All work done in the project is a part of [Google Summer of Code 2025](https://summerofcode.withgoogle.com/)
+
+- organization : [CCExtractor](https://ccextractor.org/)
+- contributor : Sandeep Patel ([sandptel](https://github.com/sandptel))
+- mentor : Soumya Ranjan Patnaik ([SoumyaRanjanPatnaik](https://github.com/SoumyaRanjanPatnaik))
+- project:   [Build a COSMIC based wayland session for Regolith](https://summerofcode.withgoogle.com/programs/2025/projects/mV0VlVwv)
 
 ## Project Description
 [Regolith](https://regolith-desktop.com/) is a productivity-focused Ubuntu-based desktop environment that combines tiling window managers (Sway, i3) with GNOME components for system management and GUI features. Regolith currently relies on a mix of GNOME components (like regolith-control-center) and Sway/i3 tiling window manager for its session and settings management. GNOME’s dependencies (Mutter compositor, custom Wayland protocols) limit flexibility and modularity, especially for Wayland environments based on wlroots like Sway.
