@@ -3,10 +3,14 @@ All work done in the project is a part of [Google Summer of Code 2025](https://s
 project link -- https://summerofcode.withgoogle.com/programs/2025/projects/mV0VlVwv
 
 ## Project Description
-Regolith is a productivity-focused Ubuntu-based desktop environment that combines tiling window managers (Sway, i3) with GNOME components for system management and GUI features. While GNOME depends on Mutter and custom Wayland protocols unsupported by wlroots-based compositors like Sway, this limits modularity and integration. To improve flexibility, this project aim to integrate the new Cosmic desktop components (cosmic-epoch), which, despite being in early alpha, offers a more modular and integration-friendly design.
+[Regolith](https://regolith-desktop.com/) is a productivity-focused Ubuntu-based desktop environment that combines tiling window managers (Sway, i3) with GNOME components for system management and GUI features. Regolith currently relies on a mix of GNOME components (like regolith-control-center) and Sway/i3 tiling window manager for its session and settings management. GNOME’s dependencies (Mutter compositor, custom Wayland protocols) limit flexibility and modularity, especially for Wayland environments based on wlroots like Sway.
 
-## Outcome
-Core system settings, input, display, power management, session integration, config bridging, and installation steps are fully implemented with COSMIC components replacing GNOME-based ones. The forked cosmic-settings replacing regolith-control-center applies live sway commands and persists configs. Installation and session launching are documented and working. The complete checklist can be found below.
+[COSMIC](https://system76.com/cosmic/?srsltid=AfmBOorpuyn88diqJVLAWtDfzj8nbNDT1MEGNQqowEia67oghLiOw5Av), a new Rust-based, modular, and efficient desktop environment by System76, offers a more integrated and modern alternative. Therefore, We are transforming Regolith from a complex, GNOME-dependent hybrid into a modern, modular, and cohesive Wayland session environment by leveraging the COSMIC ecosystem. It enhances usability, maintainability, and aligns Regolith with the future direction of Linux desktop development. 
+
+In the outcomes we will be discussing how we replaced individual dependencies either directly or by adapting (fork) it to work with regolith (sway).
+
+## Outcomes
+Core system settings, input, display, power management, session integration, config bridging (partial) , and installation steps are fully implemented with COSMIC components replacing GNOME-based ones. The forked cosmic-settings replacing regolith-control-center applies live sway commands and persists configs. Installation and session launching are documented and working. The core parts of the work are as follows: 
 
 ### `regolith-control-center` -> `cosmic-settings` 
 `cosmic-settings` was proposed to replace exsting system of (`gnome-control-center` + `regolith-inputd` + `regolith-powerd` + `regolith-displayd`) which manages changes in settings for input (keyboard, mouse, touchpad), display and power. During the development I tried 2 methods to do the same job and selected `generated-config`
@@ -14,7 +18,6 @@ Core system settings, input, display, power management, session integration, con
 #### Method 1: generated-config
 https://github.com/sandptel/cosmic-settings/pull/2
 [This fork](https://github.com/sandptel/cosmic-settings) of cosmic-settings that runs a equivalent sway command for `input` settings : `mouse` + `keyboard` + `touchpad` instead of running the change for the compositor. 
-This is used as a replacement to the existing gnome-settings application. 
 
 ##### workflow
 - Settings changes trigger equivalent sway commands through swayipc for instantaneous changes.
@@ -42,6 +45,8 @@ https://github.com/user-attachments/assets/4f0c103c-a678-42c5-aeb7-330fb7963462
 | **Performance**                | High - Uses file I/O to write and read generated configs; changes applied instantly via swayipc-rs and persistant on reload | High - Applies settings live instantly via ipc without writing files |
 | **Conflicts**| Low - All conflict will be marked as config errors and will | Low - For every reload and restart rerunning the  |
 | **Persistence / State Saving**| High - Configuration saved in generated config is loaded by sway every reload and boot automatically | Medium - Daemon must continuously run to maintain state; needs to reapply the whole list of changes every reload or boot |
+
+With these pros and cons, the chaning `cosmic-settings` to add sway (ipc+ generated-config) is selected and will be added to the release. More pages (configuration) are planned to be added to this.
 
 ### `configuration` 
 https://github.com/regolith-linux/regolith-wm-config/pull/56
@@ -83,6 +88,8 @@ I was able to create working session that runs with cosmic and its settings appl
   - [ ] Debian
 - [ ] Beta Release
 
+> **Note:** Since COSMIC is still in early development (pre-alpha), this integration project is effectively in a beta/testing phase, which means the work is pioneering and in progress.
+
 ## How to boot into regolith + cosmic session ?
 We need to install the COSMIC components 
 1. using the OpenSUSE Build Service first update the 
@@ -112,7 +119,11 @@ and move these files to /usr and /etc respectively.
 ```bash
 cosmic-session sway --config <path to cloned regolith-wm-config dir>/etc/regolith/sway/config -d
 ```
+## Other Contributions during timeline
+- https://github.com/pop-os/cosmic-settings/pull/1227
+- https://github.com/pop-os/cosmic-applets/pull/948
 
 ## References 
-https://github.com/ErikReider/SwaySettings
-https://github.com/Drakulix/cosmic-ext-extra-sessions/tree/main/sway
+- https://github.com/pop-os/cosmic-epoch
+- https://github.com/ErikReider/SwaySettings
+- https://github.com/Drakulix/cosmic-ext-extra-sessions/tree/main/sway
